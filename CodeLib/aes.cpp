@@ -11,7 +11,6 @@ namespace clib {
 		int len = std::strlen(key);
 		unsigned char* ckey = (unsigned char*)key;
 		int nlen = clib::fillup(ckey, len, (len <= 16) ? 16 : (len <= 24) ? 24 : 32);
-
 		elen = clib::expandkey(ckey, nlen);
 		return ckey;
 	}
@@ -49,7 +48,8 @@ namespace clib {
 		if (!istream.is_open()) { return false; }
 
 		constexpr int length = 16;
-		unsigned char buffer[length];
+		unsigned char arr[length];
+		unsigned char* buffer = (unsigned char*)arr;
 
 		bool donepadding = false;
 		while (istream.read((char*)buffer, length).gcount() > 0) {

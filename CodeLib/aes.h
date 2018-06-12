@@ -18,15 +18,41 @@ namespace clib {
 	class AES {
 		unsigned char* ekey;
 		int elen;
-
 		unsigned char* initkey(const char* key);
 
 	public:
+		/**
+			Constructor
+			@param key : Key to encrypt / decrypt
+		*/
 		CODELIB_API AES(const char* key) : ekey(initkey(key)) {};
 
+		/**
+			Encrypt text
+			@param data : Data to encrypt
+			@param length : Length of data block
+			@return Size of the encrypted data block
+		*/
 		CODELIB_API int encrypt(unsigned char* data, long length);
+
+		/**
+			Decrypt text
+			@param data : Data to decrypt
+			@param length : Length of data block
+			@return Size of the decrypted data block
+		*/
 		CODELIB_API int decrypt(unsigned char* data, long length);
+
+		/**
+			Encrypt file
+			@param file : File to encrypt
+		*/
 		CODELIB_API bool fencrypt(const char* file);
+
+		/**
+			Decrypt file
+			@param file : File to decrypt
+		*/
 		CODELIB_API bool fdecrypt(const char* file);
 	};
 
