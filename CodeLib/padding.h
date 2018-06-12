@@ -9,7 +9,7 @@
 
 namespace clib{
 	
-	CODELIB_API int addpadding(unsigned char* text, int text_length, int multible_of);
+	CODELIB_API int addpadding(unsigned char* &text, int text_length, int multible_of);
 	CODELIB_API int removepadding(unsigned char* text, int text_length, int multible_of);
 	CODELIB_API int fillup(unsigned char* &text, int text_length, int multible_of);
 

@@ -4,7 +4,7 @@
 
 namespace clib {
 
-	int addpadding(unsigned char* data, int data_length, int multible_of) {
+	int addpadding(unsigned char* &data, int data_length, int multible_of) {
 		int padding = (data_length % multible_of == 0) ? 16 : multible_of - data_length;
 		int newlen = data_length + padding;
 		unsigned char* newdata = new unsigned char[newlen + 1];
@@ -14,7 +14,7 @@ namespace clib {
 			*(paddingptr + i) = padding;
 		}
 		*(paddingptr + padding) = 0x00;
-		memcpy(data, newdata, newlen);
+		data = newdata;
 		return newlen;
 	}
 
