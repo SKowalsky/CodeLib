@@ -39,6 +39,34 @@ namespace clib {
 		return clib::removepadding(data, length, 16);
 	}
 
+	std::string AES::encrypt(std::string data) {
+		unsigned char* ndata = (unsigned char*)data.c_str();
+		int nlength = clib::addpadding(ndata, data.length(), 16);
+
+		long read = 0;
+		while (read < nlength) {
+			clib::aesencrypt(ndata + read, ekey, elen);
+			read += 16;
+		}
+
+		return std::string((char*)ndata);
+	}
+
+	std::string AES::decrypt(std::string data) {
+		unsigned char* ndata = (unsigned char*)data.c_str();
+		int length = data.length();
+		if(length % 16 != 0) { return NULL; }
+
+		long read = 0;
+		while (read < length) {
+			clib::aesdecrypt(ndata + read, ekey, elen);
+			read += 16;
+		}
+
+		clib::removepadding(ndata, length, 16);
+		return std::string((char*)ndata);
+	}
+
 	bool AES::fencrypt(const char* file) {
 		std::ifstream istream(file, std::ios::binary);
 

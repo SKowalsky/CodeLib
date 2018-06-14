@@ -44,6 +44,20 @@ namespace clib {
 		CODELIB_API int decrypt(unsigned char* data, long length);
 
 		/**
+		Encrypt text
+		@param data : Data to encrypt
+		@return Encrypted data
+		*/
+		CODELIB_API std::string encrypt(std::string data);
+
+		/**
+		Decrypt text
+		@param data : Data to decrypt
+		@return Decrypted data
+		*/
+		CODELIB_API std::string decrypt(std::string data);
+
+		/**
 			Encrypt file
 			@param file : File to encrypt
 		*/
