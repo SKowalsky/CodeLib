@@ -24,7 +24,7 @@
     <ClInclude Include="aes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="xorcrypt.h">
+    <ClInclude Include="xor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -35,10 +35,10 @@
     <ClCompile Include="dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="xorcrypt.cpp">
+    <ClCompile Include="aes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="aes.cpp">
+    <ClCompile Include="xor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

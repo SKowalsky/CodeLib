@@ -12,7 +12,7 @@
 #include <stdio.h>
 
 namespace clib {
-	class XOREncoder {
+	class XORCipher {
 		const char* ckey;
 		unsigned long keypos;
 		inline void next();
@@ -20,7 +20,7 @@ namespace clib {
 		inline bool exists(const char* file);
 
 	public:
-		CODELIB_API XOREncoder(const char* key) : ckey(key), keypos(0) {};
+		CODELIB_API XORCipher(const char* key) : ckey(key), keypos(0) {};
 
 		CODELIB_API char* toggle(char* bytes, int length);
 		CODELIB_API bool ftoggle(const char* srcfile);
