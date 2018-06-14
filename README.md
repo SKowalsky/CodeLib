@@ -8,10 +8,6 @@ To use the library you can either build it yourself, or just simply copy the fol
 
 - aes.h
 - aes.cpp
-- aescrypt.h
-- aescrypt.cpp
-- padding.h
-- padding.cpp
 
 ## Code Examples
 
@@ -35,6 +31,8 @@ int main()
 ````
 
 ### Encrypting and decrypting a string
+! This is currently unsafe and it is not recommended to use this. Please use the text encryption as described above instead !
+
 ````cpp
 #include "aes.h"
 

@@ -47,10 +47,12 @@ namespace clib {
 		return clib::removepadding(data, length, 16);
 	}
 
+	//Doesn't always work currently.
+	//Special characters like \0 or \x can not be represented in a string object
 	std::string AES::encrypt(std::string data) {
 		unsigned char* ndata = (unsigned char*)data.c_str();
 		int nlength = clib::addpadding(ndata, data.length(), 16);
-
+		std::cout << nlength << std::endl;
 		long read = 0;
 		while (read < nlength) {
 			clib::aesencrypt(ndata + read, ekey, elen);
@@ -164,7 +166,7 @@ namespace clib {
 		int num_rounds = (ekey_size == 176) ? key_size_16 : (ekey_size == 208) ? key_size_24 : (ekey_size == 240) ? key_size_32 : 10;
 		int cekey = 0;
 
-		addroundkey(block, ekey + cekey);
+		addroundkey(block, ekey);
 
 		for (int i = 1; i < num_rounds; i++) {
 			bytesub(block, sbox);
@@ -180,7 +182,7 @@ namespace clib {
 
 	void aesdecrypt(unsigned char* block, unsigned char* ekey, int ekey_size) {
 		int num_rounds = (ekey_size == 176) ? key_size_16 : (ekey_size == 208) ? key_size_24 : (ekey_size == 240) ? key_size_32 : 10;
-		int cekey = 16 * (num_rounds + 1) - 16;
+		int cekey = ekey_size - 16;
 
 		addroundkey(block, ekey + cekey);
 
@@ -278,13 +280,12 @@ namespace clib {
 	int expandkey(unsigned char* &key, int key_size) {
 		int ekey_size = (key_size == 16) ? ekey_size_16 : (key_size == 24) ? ekey_size_24 : (key_size == 32) ? ekey_size_32 : ekey_size_16;
 		unsigned char* ekey = new unsigned char[ekey_size];
-		int current_ekey_size = 0;
 		unsigned char buffer[4];
 		int rcon_num = 1;
 		int i;
 
 		memcpy(ekey, key, key_size);
-		current_ekey_size += key_size;
+		int current_ekey_size = key_size;
 
 		while (current_ekey_size < ekey_size) {
 			memcpy(buffer, ekey + (current_ekey_size - 4), 4);
@@ -316,7 +317,7 @@ namespace clib {
 
 	inline void subword(unsigned char* word) {
 		for (int i = 0; i < 4; i++) {
-			word[i] = sbox[(int)word[i]];
+			word[i] = sbox[word[i]];
 		}
 	}
 
@@ -458,7 +459,7 @@ namespace clib {
 	};
 
 	int addpadding(unsigned char* &data, int data_length, int newsize) {
-		int padding = (data_length % newsize == 0) ? 16 : newsize - data_length;
+		int padding = (data_length % newsize == 0) ? 16 : newsize - (data_length % newsize);
 		int newlen = data_length + padding;
 		unsigned char* newdata = new unsigned char[newlen + 1];
 		memcpy(newdata, data, data_length);
@@ -493,7 +494,7 @@ namespace clib {
 	}
 
 	unsigned char* getpadding(int data_length, int multible_of) {
-		int padding = (data_length % multible_of == 0) ? multible_of : multible_of - data_length;
+		int padding = (data_length % multible_of == 0) ? multible_of : multible_of - (data_length % multible_of);
 		unsigned char* padded = new unsigned char[padding + 1];
 		for (int i = 0; i < padding; i++) {
 			*(padded + i) = padding;
