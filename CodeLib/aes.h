@@ -68,6 +68,8 @@ namespace clib {
 			@param file : File to decrypt
 		*/
 		CODELIB_API bool fdecrypt(const char* file);
+
+		CODELIB_API void set_key(const char* key);
 	};
 
 }

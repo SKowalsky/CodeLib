@@ -137,6 +137,10 @@ namespace clib {
 		return true;
 	}
 
+	void AES::set_key(const char* key) {
+		ekey = initkey(key);
+	}
+
 	bool exists(const char* file) {
 		struct stat buffer;
 		return (stat(file, &buffer) == 0);
