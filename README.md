@@ -2,7 +2,7 @@
 # CodeLib
 
 This project is a C++ implementation of the AES algorithm. This library can be used for text and file encryption.
-It also includes a XOR Cipher algorithm, which is however easily crackable
+It also includes a XOR Cipher algorithm, which is fast, but also insecure and easily crackable
 
 ## Get started
 To use the library you can either build it yourself, or just simply copy the following header and source files into your project:
