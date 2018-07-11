@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "aes.h"
-#include <string>
 
 namespace clib {
 
@@ -23,9 +22,8 @@ namespace clib {
 		return ckey;
 	}
 
-	int AES::encrypt(unsigned char* data, long length) {
+	int AES::encrypt(unsigned char* &data, long length) {
 		int nlength = clib::addpadding(data, length, 16);
-
 		long read = 0;
 		while (read < nlength) {
 			clib::aesencrypt(data + read, ekey, elen);
@@ -35,7 +33,7 @@ namespace clib {
 		return nlength;
 	}
 
-	int AES::decrypt(unsigned char* data, long length) {
+	int AES::decrypt(unsigned char* &data, long length) {
 		if (length % 16 != 0) { return -1; }
 
 		long read = 0;
@@ -43,38 +41,7 @@ namespace clib {
 			clib::aesdecrypt(data + read, ekey, elen);
 			read += 16;
 		}
-
 		return clib::removepadding(data, length, 16);
-	}
-
-	//Doesn't always work currently.
-	//Special characters like \0 or \x can not be represented in a string object
-	std::string AES::encrypt(std::string data) {
-		unsigned char* ndata = (unsigned char*)data.c_str();
-		int nlength = clib::addpadding(ndata, data.length(), 16);
-		std::cout << nlength << std::endl;
-		long read = 0;
-		while (read < nlength) {
-			clib::aesencrypt(ndata + read, ekey, elen);
-			read += 16;
-		}
-
-		return std::string((char*)ndata);
-	}
-
-	std::string AES::decrypt(std::string data) {
-		unsigned char* ndata = (unsigned char*)data.c_str();
-		int length = data.length();
-		if(length % 16 != 0) { return NULL; }
-
-		long read = 0;
-		while (read < length) {
-			clib::aesdecrypt(ndata + read, ekey, elen);
-			read += 16;
-		}
-
-		clib::removepadding(ndata, length, 16);
-		return std::string((char*)ndata);
 	}
 
 	bool AES::fencrypt(const char* file) {
@@ -151,6 +118,14 @@ namespace clib {
 		ekey = initkey(key);
 	}
 
+	unsigned char* AES::get_ekey() {
+		return ekey;
+	}
+
+	int AES::get_ekey_len() {
+		return elen;
+	}
+
 	bool exists(const char* file) {
 		struct stat buffer;
 		return (stat(file, &buffer) == 0);
@@ -163,12 +138,12 @@ namespace clib {
 	}
 
 	void aesencrypt(unsigned char* block, unsigned char* ekey, int ekey_size) {
-		int num_rounds = (ekey_size == 176) ? key_size_16 : (ekey_size == 208) ? key_size_24 : (ekey_size == 240) ? key_size_32 : 10;
 		int cekey = 0;
+		int max_cekey = ekey_size - 32;
 
 		addroundkey(block, ekey);
 
-		for (int i = 1; i < num_rounds; i++) {
+		while (cekey < max_cekey) {
 			bytesub(block, sbox);
 			shiftrow(block);
 			mixcolumn(block, matrix);
@@ -181,12 +156,11 @@ namespace clib {
 	}
 
 	void aesdecrypt(unsigned char* block, unsigned char* ekey, int ekey_size) {
-		int num_rounds = (ekey_size == 176) ? key_size_16 : (ekey_size == 208) ? key_size_24 : (ekey_size == 240) ? key_size_32 : 10;
 		int cekey = ekey_size - 16;
 
 		addroundkey(block, ekey + cekey);
 
-		for (int i = 1; i < num_rounds; i++) {
+		while(cekey > 16) {
 			inv_shiftrow(block);
 			bytesub(block, inv_sbox);
 			addroundkey(block, ekey + (cekey -= 16));
@@ -195,7 +169,7 @@ namespace clib {
 
 		inv_shiftrow(block);
 		bytesub(block, inv_sbox);
-		addroundkey(block, ekey + (cekey -= 16));
+		addroundkey(block, ekey);
 	}
 
 	inline void addroundkey(unsigned char* block, unsigned char* key) {

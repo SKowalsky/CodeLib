@@ -1,13 +1,13 @@
 #include "stdafx.h"
-#include "xorcrypt.h"
+#include "xor.h"
 
 namespace clib {
 
-	inline void XOREncoder::next() {
+	inline void XORCipher::next() {
 		if (keypos++ >= (unsigned)strlen(ckey)) { keypos = 0; }
 	}
 
-	char* XOREncoder::toggle(char* bytes, int length) {
+	char* XORCipher::toggle(char* bytes, int length) {
 		for (int i = 0; i < length; i++) {
 			bytes[i] = ckey[keypos] ^ bytes[i];
 			next();
@@ -15,7 +15,7 @@ namespace clib {
 		return bytes;
 	}
 
-	bool XOREncoder::ftoggle(const char* file) {
+	bool XORCipher::ftoggle(const char* file) {
 		std::ifstream istream(file, std::ios::binary);
 
 		std::string tf = tmpfile(file);
@@ -39,13 +39,13 @@ namespace clib {
 		return true;
 	}
 
-	inline std::string XOREncoder::tmpfile(const char* file) {
+	inline std::string XORCipher::tmpfile(const char* file) {
 		std::string tmp(file);
 		while (exists(tmp.append("_").c_str()));
 		return tmp;
 	}
 
-	inline bool XOREncoder::exists(const char* file) {
+	inline bool XORCipher::exists(const char* file) {
 		struct stat buffer;
 		return (stat(file, &buffer) == 0);
 	}

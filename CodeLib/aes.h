@@ -32,7 +32,7 @@ namespace clib {
 			@param length : Length of data block
 			@return Size of the encrypted data block
 		*/
-		CODELIB_API int encrypt(unsigned char* data, long length);
+		CODELIB_API int encrypt(unsigned char* &data, long length);
 
 		/**
 			Decrypt text
@@ -40,21 +40,7 @@ namespace clib {
 			@param length : Length of data block
 			@return Size of the decrypted data block
 		*/
-		CODELIB_API int decrypt(unsigned char* data, long length);
-
-		/**
-		Encrypt text
-		@param data : Data to encrypt
-		@return Encrypted data
-		*/
-		CODELIB_API std::string encrypt(std::string data);
-
-		/**
-		Decrypt text
-		@param data : Data to decrypt
-		@return Decrypted data
-		*/
-		CODELIB_API std::string decrypt(std::string data);
+		CODELIB_API int decrypt(unsigned char* &data, long length);
 
 		/**
 			Encrypt file
@@ -69,6 +55,8 @@ namespace clib {
 		CODELIB_API bool fdecrypt(const char* file);
 
 		CODELIB_API void set_key(const char* key);
+		CODELIB_API unsigned char* get_ekey();
+		CODELIB_API int get_ekey_len();
 	};
 
 	/**
