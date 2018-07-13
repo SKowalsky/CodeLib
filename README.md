@@ -23,37 +23,17 @@ XOR Cipher:
 
 int main()
 {
-	clib::AES obj("secretkey");
+	clib::AES obj("secretkey!");
 
-	unsigned char text[] = "Plain text";
-	int length = obj.encrypt(text, sizeof(text)); //encryption (returns length of encrypted text)
+	std::string s = std::string("Plain text");
+	unsigned char * text = (unsigned char*)s.c_str();
+
+	int length = obj.encrypt(text, s.size());
 	std::cout << text << std::endl;
 
-	length = obj.decrypt(text, length);	//decryption (returns length of decrypted text)
+	length = obj.decrypt(text, length);
 	std::cout << text << std::endl;
-	
-	system("pause");
-}
-````
 
-### Encrypting and decrypting a string
-! This is currently unsafe and it is not recommended to use this. Please use the text encryption as described above instead !
-
-````cpp
-#include "aes.h"
-
-int main()
-{
-	clib::AES obj("secretkey");	//create a new AES object
-	
-	std::string plain("Plain text");
-	
-	std::string encrypted = crypt.encrypt(plain);	//encrypt string
-	std::cout << encrypted << std::endl;
-	
-	std::string decrypted = crypt.decrypt(encrypted);	//decrypt string
-	std::cout << decrypted << std::endl;
-	
 	system("pause");
 }
 ````
