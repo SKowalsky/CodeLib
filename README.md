@@ -8,8 +8,8 @@ It also includes a XOR Cipher algorithm, which is fast, but also insecure and ea
 To use the library you can either build it yourself, or just simply copy the following header and source files into your project:
 
 AES:
-- aes.h
-- aes.cpp
+- aes.h & aes.cpp
+- aescrypt.h & aescrypt.cpp
 
 XOR Cipher:
 - xor.h
